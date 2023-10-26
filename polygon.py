@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 from geopy.geocoders import Nominatim
 from math import radians, sin, cos, sqrt, atan2
 
@@ -21,6 +22,10 @@ landmarks = [
 
 sorted_landmarks = []
 current_landmark_index = 0
+
+
+def takeinfo():
+
 
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -67,10 +72,10 @@ def send_landmark_message(chat_id):
 def get_feedback_keyboard():
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     button_yes = telebot.types.KeyboardButton(text="Иду")
-    button_no = telebot.types.KeyboardButton(text="No")
+
     button_next = telebot.types.KeyboardButton(text="Next")
     button_stop = telebot.types.KeyboardButton(text="Stop")
-    keyboard.add(button_yes, button_no, button_next, button_stop)
+    keyboard.add(button_yes, button_next, button_stop)
     return keyboard
 
 @bot.message_handler(func=lambda message: state == State.WAITING_FOR_FEEDBACK)
@@ -89,10 +94,10 @@ def handle_feedback(message):
             send_landmark_message(message.chat.id)
             state = State.WAITING_FOR_FEEDBACK
         else:
-            bot.send_message(message.chat.id, "You have seen all the landmarks. Thank you!")
+            bot.send_message(message.chat.id, "Вы просмотрели все места в вашем радиусе.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
             state = State.WAITING_FOR_LOCATION
     elif message.text == "Stop":
-        bot.send_message(message.chat.id, "Thank you!")
+        bot.send_message(message.chat.id, "Поиск прекращён.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
         state = State.WAITING_FOR_LOCATION
 
 def get_next_keyboard():
