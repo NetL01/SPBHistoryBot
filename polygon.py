@@ -2,6 +2,8 @@ import telebot
 from telebot import types
 from geopy.geocoders import Nominatim
 from math import radians, sin, cos, sqrt, atan2
+from urllib.request import urlopen
+import datetime
 
 bot = telebot.TeleBot('5849840132:AAEHFN1i-u6ZiglFRYL4jcwvL-1_R9DuKdM')
 geolocator = Nominatim(user_agent="YOUR_APP_NAME")
@@ -24,9 +26,15 @@ sorted_landmarks = []
 current_landmark_index = 0
 
 
-def takeinfo():
-
-
+def takeinfo(m):
+    bot.send_message(m, "Старейший памятник архитектуры Санкт-Петербурга, крепость I класса. Расположена на Заячьем острове, в Санкт-Петербурге, историческое ядро города."
+                        " Дата закладки крепости 27 мая 1703 года, является датой основания Санкт-Петербурга. Никогда не использовалась ни в одном сражении."
+                        " С первой четверти XVIII века до начала 1920-х годов служила тюрьмой. С 1924 года является государственным музеем.",
+                     reply_markup=get_next_keyboard())
+    bot.send_photo(m, "https://photobuildings.com/photo/01/16/15/116154.jpg")
+    bot.send_message(m, f'TODAY: {datetime.datetime.today().strftime("%A")}\n'
+                        ""
+                        "dГрафик работы сегодня: 10:00-18:30")
 @bot.message_handler(commands=["start"])
 def start(message):
     if message.chat.type == 'private':
@@ -81,9 +89,8 @@ def get_feedback_keyboard():
 @bot.message_handler(func=lambda message: state == State.WAITING_FOR_FEEDBACK)
 def handle_feedback(message):
     global state
-    if message.text == "Yes":
-        bot.send_message(message.chat.id, "Thank you! Do you want to see the next landmark?", reply_markup=get_next_keyboard())
-        state = State.WAITING_FOR_FEEDBACK
+    if message.text == "Иду":
+        takeinfo(message.chat.id)
     elif message.text == "No":
         bot.send_message(message.chat.id, "We apologize. Do you want to see the next landmark?", reply_markup=get_next_keyboard())
         state = State.WAITING_FOR_FEEDBACK
