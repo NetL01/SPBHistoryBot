@@ -9,15 +9,9 @@ import config
 
 bot = config.bot
 
-class State:
-    WAITING_FOR_LOCATION = 0
-    WAITING_FOR_FEEDBACK = 1
 
-state = State.WAITING_FOR_LOCATION
 
-sorted_landmarks = []
-current_landmark_index = 0
-
+# Admin functions
 @bot.message_handler(commands=['check', 'status'])
 def check(message):
     print(message.chat.id)
@@ -32,6 +26,46 @@ def stop(message):
             a = crashlist[i]
     else:
         bot.reply_to(message, text=f'Permission deny.')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# /start FUNCTIONS // ONLY LOCAL MESSAGES
+
+class State:
+    WAITING_FOR_LOCATION = 0
+    WAITING_FOR_FEEDBACK = 1
+
+state = State.WAITING_FOR_LOCATION
+
+sorted_landmarks = []
+current_landmark_index = 0
 
 def takeinfo(m):
     bot.send_message(m, "Старейший памятник архитектуры Санкт-Петербурга, крепость I класса. Расположена на Заячьем острове, в Санкт-Петербурге, историческое ядро города."
@@ -132,5 +166,53 @@ def distance(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     distance = R * c  # Distance in km
     return distance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bot.polling(none_stop=True, interval=0)
