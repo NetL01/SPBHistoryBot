@@ -1,14 +1,12 @@
 import telebot
 from telebot import types
-from geopy.geocoders import Nominatim
 from math import radians, sin, cos, sqrt, atan2
-from urllib.request import urlopen
 import datetime
 import landmarks
 import config
 
 bot = config.bot
-
+geolocator = config.geolocator
 
 
 # Admin functions
