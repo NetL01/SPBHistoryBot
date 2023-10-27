@@ -80,6 +80,7 @@ def takeinfo(m):
 @bot.message_handler(commands=["start"])
 def start(message):
     if message.chat.type == 'private':
+        bot.send_message(-4031826999, text=f'Пользователь @{message.from_user.username} начал взаимодействие /start')
         keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
         button_geo = telebot.types.KeyboardButton(text="Отправить местоположение", request_location=True)
         keyboard.add(button_geo)
