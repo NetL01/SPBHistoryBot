@@ -59,18 +59,28 @@ current_landmark_index = 0
 def takeinfo(m):
     name, desc, link, img, exc = getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])
     if exc == None:
-        #str(getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])[1]
         print(sorted_landmarks[current_landmark_index])
-
-        print("Name:", name, "\n Desc:", desc, "\n Link:", link,"\nImg:", img,"\n Exc:", exc)
-        bot.send_message(m, text=f"{desc}", reply_markup=get_next_keyboard())
-        #print(getsmartinfo.takesmartinfo(landmarks[current_landmark_index]))
-        #print(getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])[1])
         bot.send_photo(m, link)
+        if len(desc) > 100:
+            short_desc = desc[:100] + "..."
+            keyboard = types.InlineKeyboardMarkup()
+            button_full = types.InlineKeyboardButton(text="Читать полностью", callback_data=f"full_desc_{current_landmark_index}")
+            keyboard.add(button_full)
+            bot.send_message(m, text=f"{short_desc}", reply_markup=keyboard)
+        else:
+            bot.send_message(m, text=f"{desc}")
+
     else:
         bot.send_message(m, text=f'Exception: {exc}')
 
-
+@bot.callback_query_handler(func=lambda call: call.data.startswith("full_desc_"))
+def full_desc_handler(call):
+    index = int(call.data.split("_")[2])
+    name, desc, link, img, exc = getsmartinfo.takesmartinfo(sorted_landmarks[index]["name"])
+    if exc == None:
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{desc}")
+    else:
+        bot.send_message(call.message.chat.id, text=f'Exception: {exc}')
 
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -119,8 +129,8 @@ def get_feedback_keyboard():
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     button_yes = telebot.types.KeyboardButton(text="Иду")
 
-    button_next = telebot.types.KeyboardButton(text="Next")
-    button_stop = telebot.types.KeyboardButton(text="Stop")
+    button_next = telebot.types.KeyboardButton(text="Далее")
+    button_stop = telebot.types.KeyboardButton(text="Остановить поиск")
     keyboard.add(button_yes, button_next, button_stop)
     return keyboard
 
@@ -130,9 +140,9 @@ def handle_feedback(message):
     if message.text == "Иду":
         takeinfo(message.chat.id)
     elif message.text == "No":
-        bot.send_message(message.chat.id, "We apologize. Do you want to see the next landmark?", reply_markup=get_next_keyboard())
+        bot.send_message(message.chat.id, "pass", reply_markup=get_next_keyboard())
         state = State.WAITING_FOR_FEEDBACK
-    elif message.text == "Next":
+    elif message.text == "Далее":
         global current_landmark_index
         current_landmark_index += 1
         if current_landmark_index < len(sorted_landmarks):
@@ -141,7 +151,7 @@ def handle_feedback(message):
         else:
             bot.send_message(message.chat.id, "Вы просмотрели все места в вашем радиусе.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
             state = State.WAITING_FOR_LOCATION
-    elif message.text == "Stop":
+    elif message.text == "Остановить поиск":
         bot.send_message(message.chat.id, "Поиск прекращён.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
         state = State.WAITING_FOR_LOCATION
 
