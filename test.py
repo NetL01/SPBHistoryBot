@@ -57,14 +57,18 @@ sorted_landmarks = []
 current_landmark_index = 0
 
 def takeinfo(m):
-    bot.send_message(m, "Старейший памятник архитектуры Санкт-Петербурга, крепость I класса. Расположена на Заячьем острове, в Санкт-Петербурге, историческое ядро города."
-                        " Дата закладки крепости 27 мая 1703 года, является датой основания Санкт-Петербурга. Никогда не использовалась ни в одном сражении."
-                        " С первой четверти XVIII века до начала 1920-х годов служила тюрьмой. С 1924 года является государственным музеем.",
-                     reply_markup=get_next_keyboard())
-    bot.send_photo(m, "https://photobuildings.com/photo/01/16/15/116154.jpg")
-    bot.send_message(m, f'TODAY: {datetime.datetime.today().strftime("%A")}\n'
-                        ""
-                        "dГрафик работы сегодня: 10:00-18:30")
+    name, desc, link, img, exc = getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])
+    if exc == None:
+        #str(getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])[1]
+        print(sorted_landmarks[current_landmark_index])
+
+        print("Name:", name, "\n Desc:", desc, "\n Link:", link,"\nImg:", img,"\n Exc:", exc)
+        bot.send_message(m, text=f"{desc}", reply_markup=get_next_keyboard())
+        #print(getsmartinfo.takesmartinfo(landmarks[current_landmark_index]))
+        #print(getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])[1])
+        bot.send_photo(m, link)
+    else:
+        bot.send_message(m, text=f'Exception: {exc}')
 
 
 
