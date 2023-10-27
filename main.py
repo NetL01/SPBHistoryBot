@@ -2,7 +2,8 @@ from datetime import datetime
 import telebot
 from telebot import types
 from math import radians, sin, cos, sqrt, atan2
-from geopy.geocoders import Nominatim
+
+
 
 
 bot = telebot.TeleBot('5849840132:AAEHFN1i-u6ZiglFRYL4jcwvL-1_R9DuKdM')

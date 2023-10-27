@@ -4,24 +4,17 @@ from geopy.geocoders import Nominatim
 from math import radians, sin, cos, sqrt, atan2
 from urllib.request import urlopen
 import datetime
+import landmarks
+import config
 
-
-bot = telebot.TeleBot('5849840132:AAEHFN1i-u6ZiglFRYL4jcwvL-1_R9DuKdM')
-geolocator = Nominatim(user_agent="YOUR_APP_NAME")
-
-
-a = 123
+bot = config.bot
 
 class State:
     WAITING_FOR_LOCATION = 0
     WAITING_FOR_FEEDBACK = 1
 
 state = State.WAITING_FOR_LOCATION
-landmarks = [
-    {"name": "Музей Эрмитаж", "address": "Санкт-Петербург, Дворцовая площадь 2"},
-    {"name": "Петропавловская крепость", "address": "St. Petersburg, Peter and Paul Fortress"},
-    {"name": "Иисаковский собор", "address": "St. Petersburg, St. Isaac's Square"},
-]
+
 sorted_landmarks = []
 current_landmark_index = 0
 
@@ -73,8 +66,8 @@ def handle_location(message):
         global sorted_landmarks
         global current_landmark_index
         distances = []
-        for landmark in landmarks:
-            location = geolocator.geocode(landmark["address"])
+        for landmark in landmarks.landmarks:
+            location = config.geolocator.geocode(landmark["address"])
             landmark_latitude = location.latitude
             landmark_longitude = location.longitude
             d = distance(latitude, longitude, landmark_latitude, landmark_longitude)
