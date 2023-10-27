@@ -49,11 +49,6 @@ def stop(message):
 
 
 
-
-
-
-
-
 # /start FUNCTIONS // ONLY LOCAL MESSAGES
 
 class State:
@@ -167,7 +162,7 @@ def distance(lat1, lon1, lat2, lon2):
     return distance
 
 
-
+# /start METHODS ENDED
 
 
 
