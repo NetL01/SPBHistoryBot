@@ -5,8 +5,10 @@ from math import radians, sin, cos, sqrt, atan2
 from urllib.request import urlopen
 import datetime
 
+
 bot = telebot.TeleBot('5849840132:AAEHFN1i-u6ZiglFRYL4jcwvL-1_R9DuKdM')
 geolocator = Nominatim(user_agent="YOUR_APP_NAME")
+
 
 class State:
     WAITING_FOR_LOCATION = 0
@@ -18,13 +20,23 @@ landmarks = [
     {"name": "Петропавловская крепость", "address": "St. Petersburg, Peter and Paul Fortress"},
     {"name": "Иисаковский собор", "address": "St. Petersburg, St. Isaac's Square"},
 ]
-
-
-
-
 sorted_landmarks = []
 current_landmark_index = 0
 
+@bot.message_handler(commands=['check', 'status'])
+def check(message):
+    print(message.chat.id)
+    bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
+
+@bot.message_handler(commands=['stop'])
+def stop(message):
+    if message.from_user.username == "netl01":
+        # bot.reply_to(message, text=f"Bot stopped.")
+        crashlist = [1, 2, 3]
+        for i in range(len(crashlist) + 10):
+            a = crashlist[i]
+    else:
+        bot.reply_to(message, text=f'Permission deny.')
 
 def takeinfo(m):
     bot.send_message(m, "Старейший памятник архитектуры Санкт-Петербурга, крепость I класса. Расположена на Заячьем острове, в Санкт-Петербурге, историческое ядро города."
@@ -35,6 +47,9 @@ def takeinfo(m):
     bot.send_message(m, f'TODAY: {datetime.datetime.today().strftime("%A")}\n'
                         ""
                         "dГрафик работы сегодня: 10:00-18:30")
+
+
+
 @bot.message_handler(commands=["start"])
 def start(message):
     if message.chat.type == 'private':
@@ -43,7 +58,7 @@ def start(message):
         keyboard.add(button_geo)
         bot.send_message(message.chat.id, "Поделись местоположением", reply_markup=keyboard)
     else:
-        bot.send_message(message.chat.id, text='Working only in local chats')
+        bot.send_message(message.chat.id, text='Работает только в локальном чате.')
 
 @bot.message_handler(content_types=['location'])
 def handle_location(message):
