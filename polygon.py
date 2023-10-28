@@ -18,7 +18,7 @@ def check(message):
 @bot.message_handler(commands=['stop'])
 def stop(message):
     if message.from_user.username == "netl01":
-        # bot.reply_to(message, text=f"Bot stopped.")
+        bot.reply_to(message, text=f"Bot stopped.")
         crashlist = [1, 2, 3]
         for i in range(len(crashlist) + 10):
             a = crashlist[i]
