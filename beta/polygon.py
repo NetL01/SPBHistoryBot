@@ -1,11 +1,10 @@
 import random
 import time
-from data import SmartSaving
 import telebot
 from telebot import types
 from math import radians, sin, cos, sqrt, atan2
-from data import config, landmarks
-from funcs import getsmartinfo, AnimeGirlsWrapper
+from beta.data import config, landmarks, SmartSaving
+from beta.funcs import getsmartinfo
 import os
 
 
