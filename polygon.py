@@ -1,19 +1,27 @@
+import random
+import time
+from data import SmartSaving
 import telebot
 from telebot import types
 from math import radians, sin, cos, sqrt, atan2
-import datetime
-import landmarks
-import config
-import getsmartinfo
+from data import config, landmarks
+from funcs import getsmartinfo, AnimeGirlsWrapper
+import os
+
+
 bot = config.bot
 geolocator = config.geolocator
+
 
 
 # Admin functions
 @bot.message_handler(commands=['check', 'status'])
 def check(message):
-    print(message.chat.id)
+    print('Message chat id: ', message.chat.id)
+    SmartSaving.SmartSaving(str(message.chat.id));
     bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
+    chatid = message.chat.id
+
 
 @bot.message_handler(commands=['stop'])
 def stop(message):
@@ -24,24 +32,6 @@ def stop(message):
             a = crashlist[i]
     else:
         bot.reply_to(message, text=f'Permission deny.')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -56,6 +46,17 @@ state = State.WAITING_FOR_LOCATION
 sorted_landmarks = []
 current_landmark_index = 0
 
+@bot.message_handler(commands=["start"])
+def start(message):
+    if message.chat.type == 'private':
+        bot.send_message(-4031826999, text=f'Пользователь @{message.from_user.username} начал взаимодействие /start')
+        keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+        button_geo = telebot.types.KeyboardButton(text="Отправить местоположение", request_location=True)
+        keyboard.add(button_geo)
+        bot.send_message(message.chat.id, "Поделись местоположением", reply_markup=keyboard)
+    else:
+        bot.send_message(message.chat.id, text='Работает только в локальном чате.')
+
 def takeinfo(m):
     name, desc, link, img, exc = getsmartinfo.takesmartinfo(sorted_landmarks[current_landmark_index]["name"])
     if exc == None:
@@ -67,6 +68,7 @@ def takeinfo(m):
             button_full = types.InlineKeyboardButton(text="Читать полностью", callback_data=f"full_desc_{current_landmark_index}")
             keyboard.add(button_full)
             bot.send_message(m, text=f"{short_desc}", reply_markup=keyboard)
+            # bot.send_message(m, text=f'Найдена полная статья на Wikipedia: {link}')
         else:
             bot.send_message(m, text=f"{desc}")
 
@@ -78,20 +80,10 @@ def full_desc_handler(call):
     index = int(call.data.split("_")[2])
     name, desc, link, img, exc = getsmartinfo.takesmartinfo(sorted_landmarks[index]["name"])
     if exc == None:
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{desc}")
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f"{desc} \n\n\n Найдена полная статья на Wikipedia: {link}")
     else:
         bot.send_message(call.message.chat.id, text=f'Exception: {exc}')
 
-@bot.message_handler(commands=["start"])
-def start(message):
-    if message.chat.type == 'private':
-        bot.send_message(-4031826999, text=f'Пользователь @{message.from_user.username} начал взаимодействие /start')
-        keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        button_geo = telebot.types.KeyboardButton(text="Отправить местоположение", request_location=True)
-        keyboard.add(button_geo)
-        bot.send_message(message.chat.id, "Поделись местоположением", reply_markup=keyboard)
-    else:
-        bot.send_message(message.chat.id, text='Работает только в локальном чате.')
 
 @bot.message_handler(content_types=['location'])
 def handle_location(message):
@@ -177,16 +169,33 @@ def distance(lat1, lon1, lat2, lon2):
 
 
 
-
+@bot.message_handler(commands=["Dima_Borisov_DDOS"])
+def DimaBorisovDDOS(message):
+    for i in range(10):
+        time.sleep(0.5)
+        bot.send_message(chat_id=953910033, text='привет пидрила')
 
 
 
 # DIMA'S IDIOTS FUN METHODS
-@bot.message_handler(content_types=["voice", "sticker", "video", "document", "photo", "text"])
-def Wiretapping(message):
-    bot.forward_message(chat_id=-4031826999, from_chat_id=message.chat.id, message_id=message.id)
+#@bot.message_handler(content_types=["voice", "sticker", "video", "document", "photo", "text"])
+#def Wiretapping(message):
+#    #    bot.forward_message(chat_id=-4031826999, from_chat_id=message.chat.id, message_id=message.id)
+#    bot.send_message(message, text='/start - поиск ближайших культурных мест.')
 
 
+@bot.message_handler(commands=["picture"])
+def AnimeGirlsInjector(message):
+    #text = str(message.text.split("/check")[1::])
+    #image = AnimeGirlsWrapper.GetAnimeLittleGirl(text)
+    #if image == None:
+    #    bot.reply_to(message, text='No images found for the query')
+    #else:
+    #    bot.send_photo(message, image)
+    files = os.listdir('sourse/ANIMEPACK/PngLittleGirls')
+    filename = str(random.randint(1, 200))
+    photo = open('sourse/ANIMEPACK/PngLittleGirls/' + filename + '.png', 'rb')
+    bot.send_photo(message.chat.id, photo)
 
 
 
