@@ -3,7 +3,7 @@ import time
 import telebot
 from telebot import types
 from math import radians, sin, cos, sqrt, atan2
-from beta.data import config, landmarks, SmartSaving
+from beta.data import config, landmarks
 from beta.funcs import getsmartinfo
 import os
 
@@ -15,13 +15,25 @@ geolocator = config.geolocator
 shaluni = []
 pedofiles = []
 # Admin functions
+#@bot.message_handler(commands=['check', 'status'])
+#def check(message):
+#    print('Message chat id: ', message.chat.id)
+#    bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
+#    chatid = message.chat.id
+#    print(message)
+
 @bot.message_handler(commands=['check', 'status'])
 def check(message):
-    print('Message chat id: ', message.chat.id)
-    SmartSaving.SmartSaving(str(message.chat.id));
-    bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
-    chatid = message.chat.id
-    print(message)
+    start_time = time.time()
+    msg = bot.send_message(message.chat.id, "Проверяется состояние соединения с серверами Telegram [0/5]")
+    for i in range(1, 6):
+        time.sleep(1)  # Пауза в 1 секунду
+        bot.edit_message_text(f"Проверяется состояние соединения с серверами Telegram [{i}/5]", message.chat.id,
+                                msg.message_id)
+    end_time = time.time()  # Фиксируем время окончания
+    delay = str(end_time - start_time - 5)[:3]
+    bot.edit_message_text(f"Статус работы: стабильный. Задержка: {delay} cек.", message.chat.id,
+                            msg.message_id)
 
 
 @bot.message_handler(commands=['stop'])
