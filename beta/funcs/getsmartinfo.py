@@ -21,4 +21,4 @@ def takesmartinfo(place):
         return name, description, link, img, exc
 
 
-print(takesmartinfo('Собор Исаакия Далматского'))
+#print(takesmartinfo('Собор Исаакия Далматского'))

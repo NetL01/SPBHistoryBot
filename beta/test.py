@@ -1,29 +1,46 @@
 import telebot
-from telebot import types
-from math import radians, sin, cos, sqrt, atan2
-import datetime
-import landmarks
-import config
-import getsmartinfo
-bot = config.bot
-geolocator = config.geolocator
+import openai
+
+# Установите свой ключ API от OpenAI
+openai.api_key = 'YOUR_OPENAI_API_KEY'
+
+# Установите ваш токен от BotFather
+bot = telebot.TeleBot('5849840132:AAEHFN1i-u6ZiglFRYL4jcwvL-1_R9DuKdM')
 
 
-# Admin functions
-@bot.message_handler(commands=['check', 'status'])
-def check(message):
-    print(message.chat.id)
-    bot.reply_to(message, text=f'Bot status: working, {message.from_user.username}!')
+# Обработчик команды /chat
+@bot.message_handler(commands=['chat'])
+def handle_chat_command(message):
+    # Отправляем инструкцию по использованию команды
+    bot.send_message(message.chat.id,
+                     "Вы можете использовать команду /chat для общения с ChatGPT. Просто отправьте ваш вопрос или сообщение.")
 
-@bot.message_handler(commands=['stop'])
-def stop(message):
-    if message.from_user.username == "netl01":
-        # bot.reply_to(message, text=f"Bot stopped.")
-        crashlist = [1, 2, 3]
-        for i in range(len(crashlist) + 10):
-            a = crashlist[i]
+
+# Обработчик всех входящих сообщений
+@bot.message_handler(func=lambda message: True)
+def handle_all_messages(message):
+    # Проверяем, является ли сообщение командой /chat
+    if message.text.startswith('/chat'):
+        # Извлекаем текст сообщения после команды /chat
+        user_input = message.text[6:].strip()
+
+        # Отправляем запрос к ChatGPT
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=user_input,
+            max_tokens=150
+        )
+
+        # Отправляем ответ пользователя
+        bot.send_message(message.chat.id, response.choices[0].text.strip())
     else:
-        bot.reply_to(message, text=f'Permission deny.')
+        # Если не команда /chat, отправляем стандартный ответ
+        bot.send_message(message.chat.id, "Привет! Я бот. Чтобы поговорить с ChatGPT, используйте команду /chat.")
+
+
+# Запуск бота
+if __name__ == "__main__":
+    bot.polling(none_stop=True)
 
 
 
@@ -33,18 +50,7 @@ def stop(message):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+'''
 # /start FUNCTIONS // ONLY LOCAL MESSAGES
 
 class State:
@@ -188,7 +194,7 @@ def Wiretapping(message):
 
 
 
-
+'''
 
 
 

@@ -1,4 +1,4 @@
-from Configs.MainRequirements import bot
+from beta.stary_pizdec.Configs.MainRequirements import bot
 
 class Echo:
         def doing(message, text):

@@ -1,5 +1,5 @@
 import telebot
-from Configs.MainRequirements import bot
+
 
 class Start:
 

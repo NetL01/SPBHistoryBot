@@ -2,14 +2,5 @@ landmarks = [
     {"name": "Эрмитаж", "address": "St. Petersburg, Дворцовая площадь 2"},
     {"name": "Петропавловская крепость", "address": "St. Petersburg, Peter and Paul Fortress"},
     {"name": "Иисакиевский собор", "address": "St. Petersburg, St. Isaac's Square"},
-    {"name": "Стрелка Васильевского острова", "address": "St. Petersburg, Биржевая площадь"},
-    {"name": "Дворцовая площадь и Александровская колонна", "address": "St. Petersburg, Дворцовая площадь"},
-    {"name": "Мариинский театр", "address": "St. Petersburg, Театральная площадь 1"},
-    {"name": "Кунсткамера", "address": "St. Petersburg, Университетская набережная 3"},
-    {"name": "Михайловский дворец", "address": "St. Petersburg, ул. Инженерная 4"},
-    {"name": "Храм Спаса на Крови", "address": "St. Petersburg, Набережная канала Грибоедова 2б"},
-    {"name": "Смольный собор", "address": "St. Petersburg, площадь Растрелли 1"},
-    {"name": "Александрийский театр", "address": "Площадь Островского 6"},
-    {"name": "Артилерийский музей", "address": "St. Petersburg, Александровский парк 7"},
-    {"name": "Казанский собор", "address": "St. Petersburg, Казанская площадь 2"},
+
 ]

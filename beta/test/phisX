@@ -1,0 +1,23 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Ваши данные
+ln_R_values = [-1.621, -1.909, -2.396, -2.974, -3.264, -3.959]
+inv_T_values = [3.378, 3.237, 3.125, 3.012, 2.932, 2.874]
+
+# Преобразование данных в массивы NumPy
+ln_R = np.array(ln_R_values)
+inv_T = np.array(inv_T_values)
+
+# Построение графика
+plt.scatter(ln_R, inv_T, label='Точки данных')
+plt.plot(ln_R, ln_R, label='y = x', linestyle='--', color='red')  # Линия y = x для сравнения
+
+# Добавление подписей и легенды
+plt.title('График ln(R) и ln(R)(1/T)')
+plt.xlabel('ln(R)')
+plt.ylabel('ln(R)(1/T)')
+plt.legend()
+
+# Отображение графика
+plt.show()
